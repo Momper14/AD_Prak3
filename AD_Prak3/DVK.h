@@ -8,7 +8,7 @@ using namespace std;
 
 class DVK{
 private:
-	GEOKO *anker_V, *anker_N, *middle, index[MAXELE];
+	GEOKO *anker_V, *anker_R, *middle, **index;
 	int anz;
 public:
 	DVK(int anzahl, char name[]);
