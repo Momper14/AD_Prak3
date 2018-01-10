@@ -118,12 +118,14 @@
     <ClInclude Include="DVK.h" />
     <ClInclude Include="DVKE.h" />
     <ClInclude Include="GEOKO.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DVK.cpp" />
     <ClCompile Include="DVKE.cpp" />
     <ClCompile Include="GEOKO.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

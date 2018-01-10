@@ -10,13 +10,16 @@ public:
 	GEOKO(int, int, int, int, double, double, GEOKO*);
 	GEOKO(int, int, int, int, double, double);
 
-	int getBrGr();
-	int getLaGr();
-	int getBrMin();
-	int getLaMin();
-	double getBrSec();
-	double getLaSec();
+	int getBrGr() const;
+	int getLaGr() const;
+	int getBrMin() const;
+	int getLaMin() const;
+	double getBrSec() const;
+	double getLaSec() const;
 
 	~GEOKO();
 };
 
+
+GEOKO * dezToTime(double, double);
+void timeToDez(const GEOKO *, double *, double *);
