@@ -3,15 +3,19 @@
 #include "iostream"
 #include "algorithm"
 
+// Liest einen Double-Wert von einem ifstream
+// @param zu lesende Datei, endesymbol
 double readDoubleFile(ifstream *ifs, char det){
 	string tmp;
 
 	getline(*ifs, tmp, det);
+	// Löschen der leerzeichen
 	tmp.erase(remove_if(tmp.begin(), tmp.end(), isspace), tmp.end());
 
 	return stod(tmp);
 }
 
+// Liest einen Integer-Wert von der Konsole
 int readInt(){
 	string tmp;
 	int bed = 1;
@@ -26,5 +30,6 @@ int readInt(){
 			cout << "Kein gueltiger Integer-Wert" << endl;
 		}
 	} while(bed);
+
 	return ret;
 }

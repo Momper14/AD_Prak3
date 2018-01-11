@@ -65,4 +65,8 @@ int main(){
 				break;
 		}
 	} while(choise != 4);
+
+	if(liste != nullptr){
+		delete liste;
+	}
 }
