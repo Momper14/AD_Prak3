@@ -17,6 +17,8 @@ public:
 	double getBrSec() const;
 	double getLaSec() const;
 
+	double operator>>(const GEOKO&) const;
+
 	~GEOKO();
 };
 

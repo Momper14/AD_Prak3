@@ -1,4 +1,5 @@
 #include "GEOKO.h"
+#include "cmath"
 
 GEOKO::GEOKO(int brGr, int laGr, int brMin, int laMin, double brSec, double laSec, GEOKO *v, GEOKO *n) :DVKE(v, n){
 	this->brGr = brGr;
@@ -37,6 +38,15 @@ double GEOKO::getBrSec() const{
 
 double GEOKO::getLaSec() const{
 	return this->laSec;
+}
+
+double GEOKO::operator>>(const GEOKO &ko) const{
+	double brT, laT, brKo, laKo;
+
+	timeToDez(this, &brT, &laT);
+	timeToDez(&ko, &brKo, &laKo);
+
+	return sqrt(pow(brT - brKo, 2) + pow(laT - laKo, 2));
 }
 
 GEOKO::~GEOKO(){
