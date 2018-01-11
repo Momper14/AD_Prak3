@@ -2,6 +2,7 @@
 #include "string"
 #include "iostream"
 #include "algorithm"
+#include "iomanip"
 
 // Liest einen Double-Wert von einem ifstream
 // @param zu lesende Datei, endesymbol
@@ -32,4 +33,14 @@ int readInt(){
 	} while(bed);
 
 	return ret;
+}
+
+void writeListe(GEOKO * arr[], int anz, string name){
+	double br, la;
+	ofstream datei(name);
+	for(int i = 0; i < anz; i++){
+		timeToDez(arr[i], &br, &la);
+		datei << std::fixed << setprecision(2) << "   " << br << ",   " << la << ";" << endl;
+	}
+	datei.close();
 }

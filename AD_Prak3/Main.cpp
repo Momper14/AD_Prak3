@@ -1,5 +1,4 @@
 #include "iostream"
-#include "cstring"
 #include "DVK.h"
 #include "string"
 #include "Util.h"
@@ -37,10 +36,10 @@ int main(){
 
 				switch(choise){
 					case 1:
-						name = "Daten.csv";
+						name = datei1;
 						break;
 					case 2:
-						name = "Daten1.csv";
+						name = datei2;
 						break;
 				}
 
@@ -50,13 +49,21 @@ int main(){
 				} while(anz > MAXELE || anz < 1);
 
 				liste = new DVK(anz, name);
+
+				double br, la;
+
+				timeToDez(liste->getMiddle(), &br, &la);
+				cout << "Breitengrad: " << br << ", Laengengrad: " << la << endl;
 			}
 			break;
 
 			case 2:
+				liste->bubbleSort();
 				break;
 			case 3:
-				break;
+			{
+			}
+			break;
 			case 4:
 				cout << "Auf wiedersehen" << endl;
 				break;

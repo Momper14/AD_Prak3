@@ -5,13 +5,14 @@
 #include "Util.h"
 
 // Initialisierungskonstruktor
-DVK::DVK(int anzahl, string name){
+DVK::DVK(int anzahl, string nameDatei){
 	this->anz = anzahl;
+	this->nameDat = nameDatei;
 
 	// Aktuelles gelesenes Element
 	GEOKO *tmp;
 	// Einzulesende Datei
-	ifstream datei(name);
+	ifstream datei(nameDatei);
 
 	// Einlesen der Datenpaare
 	for(int i = 0; i < anzahl; i++){
@@ -73,9 +74,37 @@ void DVK::middleNew(){
 	this->middle = dezToTime(brAvg, laAvg);
 }
 
+GEOKO * DVK::getMiddle() const{
+	return this->middle;
+}
+
+void DVK::bubbleSort(){
+	GEOKO *arrCpy[MAXELE];
+	for(int i = 0; i < this->anz; i++){
+		arrCpy[i] = this->index[i];
+	}
+
+	for(int run = 1; run < this->anz; run++){
+		for(int i = 0; i < this->anz - run; i++){
+			if(((*arrCpy[i] >> *this->middle) - (*arrCpy[i + 1] >> *this->middle)) > 0.0001){
+				GEOKO *tmp = arrCpy[i + 1];
+				arrCpy[i + 1] = arrCpy[i];
+				arrCpy[i] = tmp;
+			}
+		}
+	}
+
+	if(this->nameDat == datei1){
+		writeListe(arrCpy, this->anz, "Daten_S.csv");
+	}
+	if(this->nameDat == datei2){
+		writeListe(arrCpy, this->anz, "Daten1_S.csv");
+	}
+}
+
 
 // Destrukort
 DVK::~DVK(){
 	delete middle;
-	delete[] *index;
+	delete[] * index;
 }

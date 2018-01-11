@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fstream"
+#include "GEOKO.h"
 
 using namespace std;
 
@@ -10,3 +11,5 @@ double readDoubleFile(ifstream *, char);
 
 // Liest einen Integer-Wert von der Konsole
 int readInt();
+
+void writeListe(GEOKO *arr[], int anz, string name);
