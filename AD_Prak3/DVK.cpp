@@ -5,7 +5,7 @@
 #include "Util.h"
 
 // Initialisierungskonstruktor
-DVK::DVK(int anzahl, string nameDatei){
+DVK::DVK(long anzahl, string nameDatei){
 	this->anz = anzahl;
 	this->nameDat = nameDatei;
 
@@ -49,6 +49,12 @@ DVK::DVK(int anzahl, string nameDatei){
 }
 
 
+// Getter
+GEOKO * DVK::getMiddle() const{
+	return this->middle;
+}
+
+
 // Berechnet den Mittelwert neu
 void DVK::middleNew(){
 	// alten Mittelwert löschen, falls vorhanden
@@ -74,19 +80,17 @@ void DVK::middleNew(){
 	this->middle = dezToTime(brAvg, laAvg);
 }
 
-GEOKO * DVK::getMiddle() const{
-	return this->middle;
-}
-
+// Implementierung des Bubble-Sort-Algorythmus
 void DVK::bubbleSort(){
-	GEOKO *arrCpy[MAXELE];
-	for(int i = 0; i < this->anz; i++){
-		arrCpy[i] = this->index[i];
-	}
+	GEOKO **arrCpy = cpyArr(this->index, this->anz);
 
+	// Anzahl Durchlaeufe
 	for(int run = 1; run < this->anz; run++){
+		// Durchlaufen
 		for(int i = 0; i < this->anz - run; i++){
+			// Element groesser als nachfolger ?
 			if(((*arrCpy[i] >> *this->middle) - (*arrCpy[i + 1] >> *this->middle)) > 0.0001){
+				// Vertauschen
 				GEOKO *tmp = arrCpy[i + 1];
 				arrCpy[i + 1] = arrCpy[i];
 				arrCpy[i] = tmp;
@@ -94,6 +98,7 @@ void DVK::bubbleSort(){
 		}
 	}
 
+	// Schreiben in Datei
 	if(this->nameDat == datei1){
 		writeListe(arrCpy, this->anz, "Daten_S.csv");
 	}
@@ -106,5 +111,5 @@ void DVK::bubbleSort(){
 // Destrukort
 DVK::~DVK(){
 	delete middle;
-	delete[] * index;
+	delete[] *index;
 }

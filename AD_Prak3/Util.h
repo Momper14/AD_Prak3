@@ -12,4 +12,11 @@ double readDoubleFile(ifstream *, char);
 // Liest einen Integer-Wert von der Konsole
 int readInt();
 
-void writeListe(GEOKO *arr[], int anz, string name);
+// Schreibt den gegebenen Array in eine CSV-Datei
+// @param zu schreibender Array, anzahl zu schreibender Elemente, Name der Datei
+void writeListe(GEOKO *arr[], int anz, const string name);
+
+// Kopiert die angegebene Anzahl an Elementen in einen neuen Array
+// @param zu kopierender Array, anzahl zu kopierender Elemente
+// @return Kopie des Arrays
+GEOKO ** cpyArr(GEOKO *arr[], int anz);

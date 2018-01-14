@@ -18,14 +18,19 @@ private:
 	string nameDat;
 public:
 	// Initialisierungskonstruktor
-	DVK(int, string);
+	DVK(long, string);
+
+
+	// Getter
+	GEOKO * getMiddle() const;
+
 
 	// Berechnet den Mittelwert neu
 	void middleNew();
 
-	GEOKO * getMiddle() const;
-
+	// Implementierung des Bubble-Sort-Algorythmus
 	void bubbleSort();
+	
 
 	// Destrukort
 	~DVK();
