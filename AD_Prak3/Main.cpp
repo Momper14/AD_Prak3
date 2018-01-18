@@ -13,7 +13,7 @@ int main(){
 	do{
 		cout << "1 Verkettete Liste anlegen" << endl
 			<< "2 Bubble Sort" << endl
-			<< "3 ???" << endl
+			<< "3 Insertion Sort" << endl
 			<< "4 Ende" << endl;
 
 		choise = readInt();
@@ -142,7 +142,7 @@ int main(){
 				// ##################
 				// # Insertion Sort #
 				// ##################
-				//liste->insertionSort();
+				liste->insertionSort();
 
 				// 2. Messung
 				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastCount);

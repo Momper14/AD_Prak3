@@ -30,6 +30,9 @@ public:
 
 	// Implementierung des Bubble-Sort-Algorythmus
 	void bubbleSort();
+
+	// Implementierung des Insertion-Sort-Algorythmus
+	void insertionSort();
 	
 
 	// Destrukort
