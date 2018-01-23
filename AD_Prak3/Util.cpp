@@ -61,3 +61,10 @@ GEOKO ** cpyArr(GEOKO * arr[], int anz){
 
 	return arrCpy;
 }
+
+// Tauscht die beiden Elemente im Array
+void swap(int target, int source, GEOKO *arr[]){
+	GEOKO *tmp = arr[target];
+	arr[target] = arr[source];
+	arr[source] = tmp;
+}

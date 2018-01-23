@@ -20,3 +20,6 @@ void writeListe(GEOKO *arr[], int anz, const string name);
 // @param zu kopierender Array, anzahl zu kopierender Elemente
 // @return Kopie des Arrays
 GEOKO ** cpyArr(GEOKO *arr[], int anz);
+
+// Tauscht die beiden Elemente im Array
+void swap(int target, int source, GEOKO *arr[]);

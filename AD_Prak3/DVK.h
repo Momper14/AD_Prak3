@@ -33,7 +33,25 @@ public:
 
 	// Implementierung des Insertion-Sort-Algorythmus
 	void insertionSort();
-	
+
+	// Implementierung des Quick-Sort-Algorythmus
+	void quicksort();
+
+	// Teilt den Array auf und sortiert nach Pivot
+	void split(int, int, GEOKO *[]);
+
+	// Verschiebt das rechte Element hinter das linke
+	void change(int, int, GEOKO *[]);
+
+	// Implementierung des Selection-Sort-Algorythmus
+	void selectionSort();
+
+	void mergeSort();
+
+	void mergeSortAlg(int, int, GEOKO*[]);
+
+
+	void merge(int, int, int, GEOKO*[]);
 
 	// Destrukort
 	~DVK();
