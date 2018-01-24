@@ -14,8 +14,6 @@ private:
 	GEOKO * anker_V, *anker_R, *middle, *index[MAXELE];
 	// Anzahl der Elemente in der Liste
 	int anz;
-	// Name der Datei
-	string nameDat;
 public:
 	// Initialisierungskonstruktor
 	DVK(long, string);
@@ -24,31 +22,30 @@ public:
 	// Getter
 	GEOKO * getMiddle() const;
 
+	GEOKO ** getIndex();
+
+	int getAnz() const;
+
 
 	// Berechnet den Mittelwert neu
 	void middleNew();
 
 	// Implementierung des Bubble-Sort-Algorythmus
-	void bubbleSort();
+	void bubbleSort(GEOKO *[]);
 
 	// Implementierung des Insertion-Sort-Algorythmus
-	void insertionSort();
+	void insertionSort(GEOKO *[]);
 
 	// Implementierung des Quick-Sort-Algorythmus
-	void quicksort();
-
-	// Teilt den Array auf und sortiert nach Pivot
-	void split(int, int, GEOKO *[]);
+	void quicksort(int, int, GEOKO *[]);
 
 	// Verschiebt das rechte Element hinter das linke
 	void change(int, int, GEOKO *[]);
 
 	// Implementierung des Selection-Sort-Algorythmus
-	void selectionSort();
-
-	void mergeSort();
-
-	void mergeSortAlg(int, int, GEOKO*[]);
+	void selectionSort(GEOKO *[]);
+	
+	void mergeSort(int, int, GEOKO*[]);
 
 
 	void merge(int, int, int, GEOKO*[]);

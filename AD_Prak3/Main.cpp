@@ -6,29 +6,78 @@
 
 using namespace std;
 
+
+void beginMessung(LONGLONG *g_LastCount, LONGLONG *g_FirstCount, LONGLONG *g_Frequency, double *nulltime){
+
+	//----------------------------------------------------------------------
+	//
+	//    Zeitmessung im æs-Bereich
+	//    TESTANWENDUNG
+	//    Author: tbird
+	//    Date: 20.11.2007
+	//
+	//----------------------------------------------------------------------
+
+	// Variablen
+	LONGLONG g_FirstNullCount, g_LastNullCount;
+
+	// Frequenz holen
+	if(!QueryPerformanceFrequency((LARGE_INTEGER*) g_Frequency))
+		printf("Performance Counter nicht vorhanden");
+
+	double resolution = 1000000 / ((double) *g_Frequency);
+
+	printf("Frequenz des Counters:  %lld kHz\n", *g_Frequency / 1000);  //lld -> LONGLONG darstellung
+	printf("Dadurch maximale Aufloesung: %4.5f us\n", resolution);
+
+	// null-messung
+	QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstNullCount);
+	QueryPerformanceCounter((LARGE_INTEGER*) &g_LastNullCount);
+	*nulltime = (((double) (g_LastNullCount - g_FirstNullCount)) / ((double) *g_Frequency));
+
+	printf("Null-Zeit: %4.5f us\n", *nulltime * 1000000);
+
+	// beginn messung
+	QueryPerformanceCounter((LARGE_INTEGER*) g_FirstCount);
+}
+
+void endeMessung(LONGLONG g_LastCount, LONGLONG g_FirstCount, LONGLONG g_Frequency, double nulltime){
+
+	// 2. Messung
+	QueryPerformanceCounter((LARGE_INTEGER*) &g_LastCount);
+
+	double dTimeDiff = (((double) (g_LastCount - g_FirstCount)) / ((double) g_Frequency));
+
+	// Von der gemessenen Zeit die "Null-Zeit" abziehen, um genauer zu werden
+	double time = (dTimeDiff - nulltime) * 1000000; //mikro-sekunden
+	printf("Zeit: %4.5f us\n", time);
+}
 int main(){
 	int choise = 0;
 	DVK *liste = nullptr;
+	string nameDat;
 
 	do{
-		cout << "1 Verkettete Liste anlegen" << endl
+		cout << "0 Ende" << endl
+			<< "1 Verkettete Liste anlegen" << endl
 			<< "2 Bubble Sort" << endl
 			<< "3 Insertion Sort" << endl
-			<< "4 Ende" << endl
-			<< "5 Quick Sort" << endl
-			<< "6 Selection Sort" << endl
-			<< "7 Merge Sort" << endl;
+			<< "4 Quick Sort" << endl
+			<< "5 Selection Sort" << endl
+			<< "6 Merge Sort" << endl;
 
 		choise = readInt();
 
 		switch(choise){
+			case 0:
+				cout << "Auf wiedersehen" << endl;
+				break;
+
 			case 1:
 			{
 				if(liste != nullptr){
 					delete liste;
 				}
-
-				string name;
 				int anz;
 
 				do{
@@ -40,10 +89,10 @@ int main(){
 
 				switch(choise){
 					case 1:
-						name = datei1;
+						nameDat = datei1;
 						break;
 					case 2:
-						name = datei2;
+						nameDat = datei2;
 						break;
 				}
 
@@ -52,7 +101,7 @@ int main(){
 					anz = readInt();
 				} while(anz > MAXELE || anz < 1);
 
-				liste = new DVK(anz, name);
+				liste = new DVK(anz, nameDat);
 
 				double br, la;
 
@@ -63,255 +112,136 @@ int main(){
 
 			case 2:
 			{
-				//----------------------------------------------------------------------
-				//
-				//    Zeitmessung im æs-Bereich
-				//    TESTANWENDUNG
-				//    Author: tbird
-				//    Date: 20.11.2007
-				//
-				//----------------------------------------------------------------------
+				LONGLONG g_Frequency = 0, g_FirstCount = 0, g_LastCount = 0;
+				double nulltime;
 
-				// Variablen
-				LONGLONG g_Frequency, g_FirstNullCount, g_LastNullCount, g_FirstCount, g_LastCount;
+				GEOKO **arrCpy = cpyArr(liste->getIndex(), liste->getAnz());
 
-				// Frequenz holen
-				if(!QueryPerformanceFrequency((LARGE_INTEGER*) &g_Frequency))
-					printf("Performance Counter nicht vorhanden");
-
-				double resolution = 1000000 / ((double) g_Frequency);
-
-				printf("Frequenz des Counters:  %lld kHz\n", g_Frequency / 1000);  //lld -> LONGLONG darstellung
-				printf("Dadurch maximale Aufloesung: %4.5f us\n", resolution);
-
-				// null-messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstNullCount);
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastNullCount);
-				double nulltime = (((double) (g_LastNullCount - g_FirstNullCount)) / ((double) g_Frequency));
-
-				printf("Null-Zeit: %4.5f us\n", nulltime * 1000000);
-
-				// beginn messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstCount);
+				beginMessung(&g_LastCount, &g_FirstCount, &g_Frequency, &nulltime);
 
 				// ###############
 				// # Bubble Sort #
 				// ###############
-				liste->bubbleSort();
+				liste->bubbleSort(arrCpy);
 
-				// 2. Messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastCount);
+				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
 
-				double dTimeDiff = (((double) (g_LastCount - g_FirstCount)) / ((double) g_Frequency));
-
-				// Von der gemessenen Zeit die "Null-Zeit" abziehen, um genauer zu werden
-				double time = (dTimeDiff - nulltime) * 1000000; //mikro-sekunden
-				printf("Zeit: %4.5f us\n", time);
+				// Schreiben in Datei
+				if(nameDat == datei1){
+					writeListe(arrCpy, liste->getAnz(), "Daten_S.csv");
+				}
+				if(nameDat == datei2){
+					writeListe(arrCpy, liste->getAnz(), "Daten1_S.csv");
+				}
 			}
 			break;
 			case 3:
 			{
-				//----------------------------------------------------------------------
-				//
-				//    Zeitmessung im æs-Bereich
-				//    TESTANWENDUNG
-				//    Author: tbird
-				//    Date: 20.11.2007
-				//
-				//----------------------------------------------------------------------
+				LONGLONG g_Frequency = 0, g_FirstCount = 0, g_LastCount = 0;
+				double nulltime;
 
-				// Variablen
-				LONGLONG g_Frequency, g_FirstNullCount, g_LastNullCount, g_FirstCount, g_LastCount;
+				GEOKO **arrCpy = cpyArr(liste->getIndex(), liste->getAnz());
 
-				// Frequenz holen
-				if(!QueryPerformanceFrequency((LARGE_INTEGER*) &g_Frequency))
-					printf("Performance Counter nicht vorhanden");
-
-				double resolution = 1000000 / ((double) g_Frequency);
-
-				printf("Frequenz des Counters:  %lld kHz\n", g_Frequency / 1000);  //lld -> LONGLONG darstellung
-				printf("Dadurch maximale Aufloesung: %4.5f us\n", resolution);
-
-				// null-messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstNullCount);
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastNullCount);
-				double nulltime = (((double) (g_LastNullCount - g_FirstNullCount)) / ((double) g_Frequency));
-
-				printf("Null-Zeit: %4.5f us\n", nulltime * 1000000);
-
-				// beginn messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstCount);
+				beginMessung(&g_LastCount, &g_FirstCount, &g_Frequency, &nulltime);
 
 				// ##################
 				// # Insertion Sort #
 				// ##################
-				liste->insertionSort();
+				liste->insertionSort(arrCpy);
 
-				// 2. Messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastCount);
+				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
 
-				double dTimeDiff = (((double) (g_LastCount - g_FirstCount)) / ((double) g_Frequency));
+				// Schreiben in Datei
+				if(nameDat == datei1){
+					writeListe(arrCpy, liste->getAnz(), "Daten_S.csv");
+				}
+				if(nameDat == datei2){
+					writeListe(arrCpy, liste->getAnz(), "Daten1_S.csv");
+				}
+			}
+			break;
 
-				// Von der gemessenen Zeit die "Null-Zeit" abziehen, um genauer zu werden
-				double time = (dTimeDiff - nulltime) * 1000000; //mikro-sekunden
-				printf("Zeit: %4.5f us\n", time);
+			case 4:
+			{
+				LONGLONG g_Frequency = 0, g_FirstCount = 0, g_LastCount = 0;
+				double nulltime;
+
+				GEOKO **arrCpy = cpyArr(liste->getIndex(), liste->getAnz());
+
+				beginMessung(&g_LastCount, &g_FirstCount, &g_Frequency, &nulltime);
+
+				// ##############
+				// # Quick Sort #
+				// ##############
+				liste->quicksort(0, liste->getAnz() - 1, arrCpy);
+
+				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
+
+				// Schreiben in Datei
+				if(nameDat == datei1){
+					writeListe(arrCpy, liste->getAnz(), "Daten_S.csv");
+				}
+				if(nameDat == datei2){
+					writeListe(arrCpy, liste->getAnz(), "Daten1_S.csv");
+				}
 			}
 			break;
 
 			case 5:
 			{
-				//----------------------------------------------------------------------
-				//
-				//    Zeitmessung im æs-Bereich
-				//    TESTANWENDUNG
-				//    Author: tbird
-				//    Date: 20.11.2007
-				//
-				//----------------------------------------------------------------------
+				LONGLONG g_Frequency = 0, g_FirstCount = 0, g_LastCount = 0;
+				double nulltime;
+				GEOKO **arrCpy = cpyArr(liste->getIndex(), liste->getAnz());
 
-				// Variablen
-				LONGLONG g_Frequency, g_FirstNullCount, g_LastNullCount, g_FirstCount, g_LastCount;
+				beginMessung(&g_LastCount, &g_FirstCount, &g_Frequency, &nulltime);
 
-				// Frequenz holen
-				if(!QueryPerformanceFrequency((LARGE_INTEGER*) &g_Frequency))
-					printf("Performance Counter nicht vorhanden");
+				// ##################
+				// # Selection Sort #
+				// ##################
+				liste->selectionSort(arrCpy);
 
-				double resolution = 1000000 / ((double) g_Frequency);
+				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
 
-				printf("Frequenz des Counters:  %lld kHz\n", g_Frequency / 1000);  //lld -> LONGLONG darstellung
-				printf("Dadurch maximale Aufloesung: %4.5f us\n", resolution);
-
-				// null-messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstNullCount);
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastNullCount);
-				double nulltime = (((double) (g_LastNullCount - g_FirstNullCount)) / ((double) g_Frequency));
-
-				printf("Null-Zeit: %4.5f us\n", nulltime * 1000000);
-
-				// beginn messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstCount);
-
-				// ##############
-				// # Quick Sort #
-				// ##############
-				liste->quicksort();
-
-				// 2. Messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastCount);
-
-				double dTimeDiff = (((double) (g_LastCount - g_FirstCount)) / ((double) g_Frequency));
-
-				// Von der gemessenen Zeit die "Null-Zeit" abziehen, um genauer zu werden
-				double time = (dTimeDiff - nulltime) * 1000000; //mikro-sekunden
-				printf("Zeit: %4.5f us\n", time);
+				// Schreiben in Datei
+				if(nameDat == datei1){
+					writeListe(arrCpy, liste->getAnz(), "Daten_S.csv");
+				}
+				if(nameDat == datei2){
+					writeListe(arrCpy, liste->getAnz(), "Daten1_S.csv");
+				}
 			}
 			break;
 
 			case 6:
 			{
-				//----------------------------------------------------------------------
-				//
-				//    Zeitmessung im æs-Bereich
-				//    TESTANWENDUNG
-				//    Author: tbird
-				//    Date: 20.11.2007
-				//
-				//----------------------------------------------------------------------
+				LONGLONG g_Frequency = 0, g_FirstCount = 0, g_LastCount = 0;
+				double nulltime;
 
-				// Variablen
-				LONGLONG g_Frequency, g_FirstNullCount, g_LastNullCount, g_FirstCount, g_LastCount;
+				GEOKO **arrCpy = cpyArr(liste->getIndex(), liste->getAnz());
 
-				// Frequenz holen
-				if(!QueryPerformanceFrequency((LARGE_INTEGER*) &g_Frequency))
-					printf("Performance Counter nicht vorhanden");
-
-				double resolution = 1000000 / ((double) g_Frequency);
-
-				printf("Frequenz des Counters:  %lld kHz\n", g_Frequency / 1000);  //lld -> LONGLONG darstellung
-				printf("Dadurch maximale Aufloesung: %4.5f us\n", resolution);
-
-				// null-messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstNullCount);
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastNullCount);
-				double nulltime = (((double) (g_LastNullCount - g_FirstNullCount)) / ((double) g_Frequency));
-
-				printf("Null-Zeit: %4.5f us\n", nulltime * 1000000);
-
-				// beginn messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstCount);
-
-				// ##################
-				// # Selection Sort #
-				// ##################
-				liste->selectionSort();
-
-				// 2. Messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastCount);
-
-				double dTimeDiff = (((double) (g_LastCount - g_FirstCount)) / ((double) g_Frequency));
-
-				// Von der gemessenen Zeit die "Null-Zeit" abziehen, um genauer zu werden
-				double time = (dTimeDiff - nulltime) * 1000000; //mikro-sekunden
-				printf("Zeit: %4.5f us\n", time);
-			}
-			break;
-
-			case 7:
-			{
-				//----------------------------------------------------------------------
-				//
-				//    Zeitmessung im æs-Bereich
-				//    TESTANWENDUNG
-				//    Author: tbird
-				//    Date: 20.11.2007
-				//
-				//----------------------------------------------------------------------
-
-				// Variablen
-				LONGLONG g_Frequency, g_FirstNullCount, g_LastNullCount, g_FirstCount, g_LastCount;
-
-				// Frequenz holen
-				if(!QueryPerformanceFrequency((LARGE_INTEGER*) &g_Frequency))
-					printf("Performance Counter nicht vorhanden");
-
-				double resolution = 1000000 / ((double) g_Frequency);
-
-				printf("Frequenz des Counters:  %lld kHz\n", g_Frequency / 1000);  //lld -> LONGLONG darstellung
-				printf("Dadurch maximale Aufloesung: %4.5f us\n", resolution);
-
-				// null-messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstNullCount);
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastNullCount);
-				double nulltime = (((double) (g_LastNullCount - g_FirstNullCount)) / ((double) g_Frequency));
-
-				printf("Null-Zeit: %4.5f us\n", nulltime * 1000000);
-
-				// beginn messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_FirstCount);
+				beginMessung(&g_LastCount, &g_FirstCount, &g_Frequency, &nulltime);
 
 				// ##############
 				// # Merge Sort #
 				// ##############
-				liste->mergeSort();
+				liste->mergeSort(0, liste->getAnz() - 1, arrCpy);
 
-				// 2. Messung
-				QueryPerformanceCounter((LARGE_INTEGER*) &g_LastCount);
+				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
 
-				double dTimeDiff = (((double) (g_LastCount - g_FirstCount)) / ((double) g_Frequency));
-
-				// Von der gemessenen Zeit die "Null-Zeit" abziehen, um genauer zu werden
-				double time = (dTimeDiff - nulltime) * 1000000; //mikro-sekunden
-				printf("Zeit: %4.5f us\n", time);
+				// Schreiben in Datei
+				if(nameDat == datei1){
+					writeListe(arrCpy, liste->getAnz(), "Daten_S.csv");
+				}
+				if(nameDat == datei2){
+					writeListe(arrCpy, liste->getAnz(), "Daten1_S.csv");
+				}
 			}
 			break;
-			case 4:
-				cout << "Auf wiedersehen" << endl;
-				break;
 			default:
 				cout << "ungueltige eingabe!" << endl;
 				break;
 		}
-	} while(choise != 4);
+	} while(choise != 0);
 
 	if(liste != nullptr){
 		delete liste;

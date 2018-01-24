@@ -7,7 +7,6 @@
 // Initialisierungskonstruktor
 DVK::DVK(long anzahl, string nameDatei){
 	this->anz = anzahl;
-	this->nameDat = nameDatei;
 
 	// Aktuelles gelesenes Element
 	GEOKO *tmp;
@@ -54,6 +53,14 @@ GEOKO * DVK::getMiddle() const{
 	return this->middle;
 }
 
+GEOKO ** DVK::getIndex(){
+	return this->index;
+}
+
+int DVK::getAnz() const{
+	return this->anz;
+}
+
 
 // Berechnet den Mittelwert neu
 void DVK::middleNew(){
@@ -81,9 +88,7 @@ void DVK::middleNew(){
 }
 
 // Implementierung des Bubble-Sort-Algorythmus
-void DVK::bubbleSort(){
-	GEOKO **arrCpy = cpyArr(this->index, this->anz);
-
+void DVK::bubbleSort(GEOKO *arrCpy[]){
 	// Anzahl Durchlaeufe
 	for(int run = 1; run < this->anz; run++){
 		// Durchlaufen
@@ -95,20 +100,10 @@ void DVK::bubbleSort(){
 			}
 		}
 	}
-
-	// Schreiben in Datei
-	if(this->nameDat == datei1){
-		writeListe(arrCpy, this->anz, "Daten_S.csv");
-	}
-	if(this->nameDat == datei2){
-		writeListe(arrCpy, this->anz, "Daten1_S.csv");
-	}
 }
 
 // Implementierung des Insertion-Sort-Algorythmus
-void DVK::insertionSort(){
-	GEOKO **arrCpy = cpyArr(this->index, this->anz);
-
+void DVK::insertionSort(GEOKO *arrCpy[]){
 	for(int i = 1; i < this->anz; i++){
 		GEOKO *sort = arrCpy[i];
 		int j = i;
@@ -120,33 +115,10 @@ void DVK::insertionSort(){
 		}
 
 	}
-	// Schreiben in Datei
-	if(this->nameDat == datei1){
-		writeListe(arrCpy, this->anz, "Daten_S.csv");
-	}
-	if(this->nameDat == datei2){
-		writeListe(arrCpy, this->anz, "Daten1_S.csv");
-	}
 }
 
 // Implementierung des Quick-Sort-Algorythmus
-void DVK::quicksort(){
-	GEOKO **arrCpy = cpyArr(this->index, this->anz);
-
-	// Zerteilen
-	split(0, this->anz - 1, arrCpy);
-
-	// Schreiben in Datei
-	if(this->nameDat == datei1){
-		writeListe(arrCpy, this->anz, "Daten_S.csv");
-	}
-	if(this->nameDat == datei2){
-		writeListe(arrCpy, this->anz, "Daten1_S.csv");
-	}
-}
-
-// Teilt den Array auf und sortiert nach Pivot
-void DVK::split(int links, int rechts, GEOKO *arr[]){
+void DVK::quicksort(int links, int rechts, GEOKO *arr[]){
 	int pivot = links;
 	for(int i = links + 1; i <= rechts; i++){
 		if(((*arr[pivot] >> *this->middle) - (*arr[i] >> *this->middle)) > 0.0001){
@@ -156,11 +128,11 @@ void DVK::split(int links, int rechts, GEOKO *arr[]){
 	}
 	// Like Liste
 	if(links < pivot - 1){
-		split(links, pivot - 1, arr);
+		quicksort(links, pivot - 1, arr);
 	}
 	// Rechte Liste
 	if(rechts > pivot + 1){
-		split(pivot + 1, rechts, arr);
+		quicksort(pivot + 1, rechts, arr);
 	}
 }
 
@@ -173,8 +145,7 @@ void DVK::change(int links, int rechts, GEOKO *arr[]){
 }
 
 // Implementierung des Selection-Sort-Algorythmus
-void DVK::selectionSort(){
-	GEOKO **arrCpy = cpyArr(this->index, this->anz);
+void DVK::selectionSort(GEOKO *arrCpy[]){
 
 	for(int x = 0; x < this->anz - 1; x++){
 		int kl = x;
@@ -185,37 +156,15 @@ void DVK::selectionSort(){
 		}
 		swap(x, kl, arrCpy);
 	}
-
-	// Schreiben in Datei
-	if(this->nameDat == datei1){
-		writeListe(arrCpy, this->anz, "Daten_S.csv");
-	}
-	if(this->nameDat == datei2){
-		writeListe(arrCpy, this->anz, "Daten1_S.csv");
-	}
 }
 
-void DVK::mergeSort(){
-	GEOKO **arrCpy = cpyArr(this->index, this->anz);
-
-	mergeSortAlg(0, this->anz, arrCpy);
-
-	// Schreiben in Datei
-	if(this->nameDat == datei1){
-		writeListe(arrCpy, this->anz, "Daten_S.csv");
-	}
-	if(this->nameDat == datei2){
-		writeListe(arrCpy, this->anz, "Daten1_S.csv");
-	}
-}
-
-void DVK::mergeSortAlg(int left, int right, GEOKO *arr[]){
-	int middle = ceil((left + right) / 2.0);
+void DVK::mergeSort(int left, int right, GEOKO *arr[]){
+	int middle = (int) ceil((left + right) / 2.0);
 
 	if((middle - left) > 1)
-		mergeSortAlg(left, middle, arr);
+		mergeSort(left, middle, arr);
 	if(right - (middle) > 1)
-		mergeSortAlg(middle, right, arr);
+		mergeSort(middle, right, arr);
 	merge(left, middle, right, arr);
 }
 
