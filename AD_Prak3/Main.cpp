@@ -75,7 +75,8 @@ int main(){
 			<< "3 Insertion Sort" << endl
 			<< "4 Quick Sort" << endl
 			<< "5 Selection Sort" << endl
-			<< "6 Merge Sort" << endl;
+			<< "6 Merge Sort" << endl
+			<< "7 Heap Sort" << endl;
 
 		choise = readInt();
 
@@ -218,6 +219,27 @@ int main(){
 				// # Merge Sort #
 				// ##############
 				liste->mergeSort(0, liste->getAnz() - 1, arrCpy);
+
+				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
+
+				// Schreiben in Datei
+				schreiben(arrCpy, liste->getAnz(), nameDat);
+			}
+			break;
+
+			case 7:
+			{
+				LONGLONG g_Frequency = 0, g_FirstCount = 0, g_LastCount = 0;
+				double nulltime;
+
+				GEOKO **arrCpy = cpyArr(liste->getIndex(), liste->getAnz());
+
+				beginMessung(&g_LastCount, &g_FirstCount, &g_Frequency, &nulltime);
+
+				// #############
+				// # Heap Sort #
+				// #############
+				liste->heapSort(arrCpy);
 
 				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
 

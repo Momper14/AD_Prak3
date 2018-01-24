@@ -186,33 +186,44 @@ void DVK::merge(int left, int middle, int right, GEOKO *arr[]){
 	}
 }
 
-void DVK::heapSort(GEOKO *[], int anz){
+// Implementierung des Heap-Sort-Algorythmus
+void DVK::heapSort(GEOKO *arr[]){
+	int anz = this->anz - 1;
+	build_maxheap(arr, anz);
+	for(int i = anz; i > 0; i--){
+		// Größtes Element raus nehmen, letztes einfügen und einsortieren
+		swap(i, 0, arr);
+		heapify_max(arr, 0, i - 1);
+	}
 }
 
-void DVK::createHeap(GEOKO *[], int anz){
-}
+// Einsortieren des Ellements i in seinem Zweig
+void DVK::heapify_max(GEOKO *arr[], int nodeP, int anz){
+	// gültige Anzahl?
+	if(anz <= 0) return;
+	int child = 2 * nodeP, node = nodeP;
 
-// Sortiert das letzte Element ein
-void DVK::rising(GEOKO *arr[], int anz){
-	int par = parent(anz);
-	while(1){
-
-		if(anz == 0){
-			break;
+	while(child <= anz){
+		// 2 Kinder und 2. Kind größer als 1.?
+		if(child < anz && (*arr[child + 1] >> *this->middle) > (*arr[child] >> *this->middle)){
+			// auf 2. setzen
+			child++;
 		}
+		// kind größer als Knoten?
+		if(((*arr[node] >> *this->middle) - (*arr[child] >> *this->middle)) < 0.0001){
+			swap(node, child, arr);
+			node = child;
+			child = 2 * child;
+		} else break;
 	}
 }
 
-int DVK::parent(int pos){
-	pos--;
-	if(pos == -1){
-		return -1;
+// Max-Heap aufbauen
+void DVK::build_maxheap(GEOKO *arr[], int anz){
+	// Für jeden Knoten mit Kinder(n)
+	for(int node = anz / 2; node >= 0; node--){
+		heapify_max(arr, node, anz);
 	}
-	if(pos % 2 == 1){
-		pos--;
-	}
-	pos /= 2;
-	return pos;
 }
 
 
