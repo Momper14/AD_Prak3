@@ -52,6 +52,17 @@ void endeMessung(LONGLONG g_LastCount, LONGLONG g_FirstCount, LONGLONG g_Frequen
 	double time = (dTimeDiff - nulltime) * 1000000; //mikro-sekunden
 	printf("Zeit: %4.5f us\n", time);
 }
+
+void schreiben(GEOKO *arrCpy[], int anz, string nameDat){
+// Schreiben in Datei
+	if(nameDat == datei1){
+		writeListe(arrCpy, anz, "Daten_S.csv");
+	}
+	if(nameDat == datei2){
+		writeListe(arrCpy, anz, "Daten1_S.csv");
+	}
+}
+
 int main(){
 	int choise = 0;
 	DVK *liste = nullptr;
@@ -127,14 +138,10 @@ int main(){
 				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
 
 				// Schreiben in Datei
-				if(nameDat == datei1){
-					writeListe(arrCpy, liste->getAnz(), "Daten_S.csv");
-				}
-				if(nameDat == datei2){
-					writeListe(arrCpy, liste->getAnz(), "Daten1_S.csv");
-				}
+				schreiben(arrCpy, liste->getAnz(), nameDat);
 			}
 			break;
+
 			case 3:
 			{
 				LONGLONG g_Frequency = 0, g_FirstCount = 0, g_LastCount = 0;
@@ -152,12 +159,7 @@ int main(){
 				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
 
 				// Schreiben in Datei
-				if(nameDat == datei1){
-					writeListe(arrCpy, liste->getAnz(), "Daten_S.csv");
-				}
-				if(nameDat == datei2){
-					writeListe(arrCpy, liste->getAnz(), "Daten1_S.csv");
-				}
+				schreiben(arrCpy, liste->getAnz(), nameDat);
 			}
 			break;
 
@@ -178,12 +180,8 @@ int main(){
 				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
 
 				// Schreiben in Datei
-				if(nameDat == datei1){
-					writeListe(arrCpy, liste->getAnz(), "Daten_S.csv");
-				}
-				if(nameDat == datei2){
-					writeListe(arrCpy, liste->getAnz(), "Daten1_S.csv");
-				}
+				schreiben(arrCpy, liste->getAnz(), nameDat);
+
 			}
 			break;
 
@@ -203,12 +201,7 @@ int main(){
 				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
 
 				// Schreiben in Datei
-				if(nameDat == datei1){
-					writeListe(arrCpy, liste->getAnz(), "Daten_S.csv");
-				}
-				if(nameDat == datei2){
-					writeListe(arrCpy, liste->getAnz(), "Daten1_S.csv");
-				}
+				schreiben(arrCpy, liste->getAnz(), nameDat);
 			}
 			break;
 
@@ -229,12 +222,7 @@ int main(){
 				endeMessung(g_LastCount, g_FirstCount, g_Frequency, nulltime);
 
 				// Schreiben in Datei
-				if(nameDat == datei1){
-					writeListe(arrCpy, liste->getAnz(), "Daten_S.csv");
-				}
-				if(nameDat == datei2){
-					writeListe(arrCpy, liste->getAnz(), "Daten1_S.csv");
-				}
+				schreiben(arrCpy, liste->getAnz(), nameDat);
 			}
 			break;
 			default:
