@@ -44,11 +44,21 @@ public:
 
 	// Implementierung des Selection-Sort-Algorythmus
 	void selectionSort(GEOKO *[]);
-	
+
+	// Implementierung des Merge-Sort-Algorythmus
 	void mergeSort(int, int, GEOKO*[]);
 
-
+	// Fürht "Beide" Listen zusammen
 	void merge(int, int, int, GEOKO*[]);
+
+	void heapSort(GEOKO *[], int anz);
+
+	void createHeap(GEOKO *[], int anz);
+
+	void rising(GEOKO *[], int);
+
+	int parent(int);
+
 
 	// Destrukort
 	~DVK();

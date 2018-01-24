@@ -158,6 +158,7 @@ void DVK::selectionSort(GEOKO *arrCpy[]){
 	}
 }
 
+// Implementierung des Merge-Sort-Algorythmus
 void DVK::mergeSort(int left, int right, GEOKO *arr[]){
 	int middle = (int) ceil((left + right) / 2.0);
 
@@ -168,6 +169,7 @@ void DVK::mergeSort(int left, int right, GEOKO *arr[]){
 	merge(left, middle, right, arr);
 }
 
+// Fürht "Beide" Listen zusammen
 void DVK::merge(int left, int middle, int right, GEOKO *arr[]){
 	int leftNum = middle - left, rightNum = right - middle;
 
@@ -183,6 +185,36 @@ void DVK::merge(int left, int middle, int right, GEOKO *arr[]){
 		}
 	}
 }
+
+void DVK::heapSort(GEOKO *[], int anz){
+}
+
+void DVK::createHeap(GEOKO *[], int anz){
+}
+
+// Sortiert das letzte Element ein
+void DVK::rising(GEOKO *arr[], int anz){
+	int par = parent(anz);
+	while(1){
+
+		if(anz == 0){
+			break;
+		}
+	}
+}
+
+int DVK::parent(int pos){
+	pos--;
+	if(pos == -1){
+		return -1;
+	}
+	if(pos % 2 == 1){
+		pos--;
+	}
+	pos /= 2;
+	return pos;
+}
+
 
 // Destrukort
 DVK::~DVK(){
